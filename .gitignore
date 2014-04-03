@@ -1,2 +1,7 @@
 /dades
 *.txt
+!spec/*.txt
+*.csv
+!spec/*.csv
+*.arff
+!spec/*.arff
