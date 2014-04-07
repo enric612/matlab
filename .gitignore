@@ -5,3 +5,5 @@
 !spec/*.csv
 *.arff
 !spec/*.arff
+*.asv
+!spec/*.asv
