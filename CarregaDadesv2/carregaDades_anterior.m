@@ -23,6 +23,9 @@ if par
     fi=(fi*100)-400;
     si=(si*100)-400;
     
+    % llimit virtual de 12 segons on se suposa que esta el pic intermig
+    % entre la baixada i la pujada final.
+    asi = si +1200;
     ti=(ti*100)-400;
 
 % Si els fitxers no porten els parametres amb intervals els llegim els
@@ -30,10 +33,17 @@ if par
 
 else 
     
+%     fi = 1100;
+%     si = 7600;
+%     ti = 10500;
+%     asi = 8800;
+
     fi = 1100;
     si = 12600;
-    ti = 20601;
-       
+    ti = 20600;
+    asi = 13800;
+
+    
 end
 
 %Fitxer auxiliar per guardar la cache (dades amb punt decimal i sense
@@ -130,65 +140,74 @@ for i=1:c
     
     % Fixem els maxims i minims en funció de l'amplitud de les gràfiques.
     
-   
     % Llimits absoluts
-    max1 = max(datos(fi:si,i));
-    min1 = min(datos(fi:si,i));
-    max2 = max(datos(si:ti,i));
+    % En alguns casos el maxim "real" de pujada es troba despres d'un fals
+    % màxim inicial degut a l'estabilització de la senyal previa a l'inici
+    % del primer interval. Per tal d'evitar-ho incloem un offset de 150
+    % mostres ambans de buscar el maxim1.
     
+    [max1, pos]= max(datos((fi+150):si,i));
+    
+    % Adjustem la posició del maxim a l'escala absoluta (li sumem les
+    % mostres a partir de quan comencem a buscar el maxim).
+    pos = pos + fi+150;
+    min1 = min(datos(fi:pos,i));
+    min2 = min(datos(si:asi,i));
+    max2 = max(datos(si:asi,i));
+    min3 = min(datos(asi:ti,i));
+    max3 = max(datos(asi:ti,i));
     
     % Adjust necesari per a fixar els llimis relatius dacord amb
     % l'oscilació entre minim i maxims absoluts.
     
     dif1 = max1-min1;
-    dif2 = max2-min1;
+    dif2 = max2-min2;
+    dif3 = max3-min3;
+    dif4 = max1-min2;
     
     % Llimits relatius
-    minim1 = 0.20*dif1 + min1;
-    minim2 = 0.02*dif1 + min1;
-    maxim1 = 0.95*dif1 + min1;
-    maxim2 = 0.85*dif2 + min1; 
-   
+    minim1 = 0.05*dif1 + min1;
+    maxim1 = 0.85*dif1 + min1;
+    maxim2 = 0.98*dif1 + min1;
+    minim2 = 0.05*dif4 + min2;
+    minim3 = 0.05*dif2 + min2;
+    maxim3 = 0.85*dif2 + min2;
+    minim4 = 0.05*dif3 + min3;
+    maxim4 = 0.85*dif3 + min3;
     
     % Umbralitzem en funcio del interval
     
-    % Interval [1:si]
-    for j=1:si
+    % Interval [1:fi]
+    for j=1:fi
         
-        if datos(j,i) < minim2
-            
-            datos2(j,i) = minim2;
-            
-        elseif datos(j,i) < minim1
+        if datos(j,i) < minim1
             
             datos2(j,i) = minim1;
             
-       
-        elseif datos(j,i) > maxim1
-            
-            datos2(j,i) = maxim1;
-       
         else
             
             datos2(j,i) = datos(j,i);
             
         end
-        
     end
     
-    % Interval [si:ti]
+    % Interval [fi:pos]
     
-    for j=si:ti
+    for j=fi:pos
         
          if datos(j,i) > maxim2
             
             datos2(j,i) = maxim2;
             
-         elseif datos(j,i) < minim2
+         elseif datos(j,i) > maxim1
             
-            datos2(j,i) = minim2;
+            datos2(j,i) = maxim1;
+        
+         elseif datos(j,i) < minim1
             
-          else
+            datos2(j,i) = minim1;
+                           
+        else
             
             datos2(j,i) = datos(j,i);        
         
@@ -198,9 +217,69 @@ for i=1:c
     end
     
     
+    % Interval [fi:si]
     
+    for j=pos:si
+        
+        if datos(j,i) > maxim2
+            
+            datos2(j,i) = maxim2;
+            
+        elseif datos(j,i) > maxim1
+            
+            datos2(j,i) = maxim1;
+        
+        elseif datos(j,i) < minim2
+        
+            datos2(j,i) = minim2;
+       
+        else
+            
+            datos2(j,i) = datos(j,i);        
+        
+        end
     
-  
+    end
+    
+    % Interval [si:asi]
+    
+    for j=si:asi
+        
+       if datos(j,i) > maxim3
+           
+           datos2(j,i) = maxim3;
+           
+       elseif datos(j,i) < minim3
+           
+           datos2(j,i) = minim3;
+           
+       else
+           
+           datos2(j,i) = datos(j,i);
+           
+       end
+        
+    end
+    
+    % Interval [asi:f]
+    
+    for j=asi:f
+       
+        if datos(j,i) < minim4
+            
+            datos2(j,i) = minim4;
+            
+        elseif datos(j,i) > maxim4
+            
+            datos2(j,i) = maxim4;
+            
+        else 
+            
+            datos2(j,i) = datos(j,i);
+            
+        end
+        
+    end
     
     
     
