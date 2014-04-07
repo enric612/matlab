@@ -1,4 +1,4 @@
-function [datos, datos2, T, fi, si, ti = carregaDades(file, par)
+function [datos, datos2, T, fi, si, ti] = carregaDades(file, par)
 
 format long;
 
