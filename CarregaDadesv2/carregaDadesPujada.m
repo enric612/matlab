@@ -23,7 +23,7 @@ if par
     fi=(fi*100)-400;
     si=(si*100)-400;
     
-    ti=(ti*100)-400;
+    ti=(ti*100)-399;
 
 % Si els fitxers no porten els parametres amb intervals els llegim els
 % suposem.
@@ -118,95 +118,99 @@ clear datos2;
 T=T(400:end); 
 
 
-% % ****************************************************************
-% % UMBRALITZACIÓ DE LES DADES EN FUNCIÓ DELS INTERVALS FI, SI , TI
-% % MAXIMS AL 85% I MINIMS AL 5%
-% % ****************************************************************
-% 
-% % Llimits de tamany de les dades
-% [f,c] = size(datos);
-% 
-% for i=1:c
-%     
-%     % Fixem els maxims i minims en funció de l'amplitud de les gràfiques.
-%     
-%    
-%     % Llimits absoluts
-%     max1 = max(datos(fi:si,i));
-%     min1 = min(datos(fi:si,i));
-%     max2 = max(datos(si:ti,i));
-%     
-%     
-%     % Adjust necesari per a fixar els llimis relatius dacord amb
-%     % l'oscilació entre minim i maxims absoluts.
-%     
-%     dif1 = max1-min1;
-%     dif2 = max2-min1;
-%     
-%     % Llimits relatius
-%     minim1 = 0.20*dif1 + min1;
-%     minim2 = 0.02*dif1 + min1;
-%     maxim1 = 0.95*dif1 + min1;
-%     maxim2 = 0.85*dif2 + min1; 
-%    
-%     
-%     % Umbralitzem en funcio del interval
-%     
-%     % Interval [1:si]
-%     for j=1:si
-%         
-%         if datos(j,i) < minim2
-%             
-%             datos2(j,i) = minim2;
-%             
-%         elseif datos(j,i) < minim1
-%             
-%             datos2(j,i) = minim1;
-%             
-%        
-%         elseif datos(j,i) > maxim1
-%             
-%             datos2(j,i) = maxim1;
-%        
-%         else
-%             
-%             datos2(j,i) = datos(j,i);
-%             
-%         end
-%         
-%     end
-%     
-%     % Interval [si:ti]
-%     
-%     for j=si:ti
-%         
-%          if datos(j,i) > maxim2
-%             
-%             datos2(j,i) = maxim2;
-%             
-%          elseif datos(j,i) < minim2
-%             
-%             datos2(j,i) = minim2;
-%             
-%           else
-%             
-%             datos2(j,i) = datos(j,i);        
-%         
-%         end
-%         
-%         
-%     end
-%     
-%     
-%     
-%     
-%   
-%     
-%     
-%     
-%     
-% end
-datos2=datos;
+% ****************************************************************
+% UMBRALITZACIÓ DE LES DADES EN FUNCIÓ DELS INTERVALS FI, SI , TI
+% MAXIMS AL 85% I MINIMS AL 5%
+% ****************************************************************
+
+% Llimits de tamany de les dades
+[f,c] = size(datos);
+
+for i=1:c
+    
+    % Fixem els maxims i minims en funció de l'amplitud de les gràfiques.
+    
+   
+    % Llimits absoluts
+    max1 = max(datos(fi:si,i));
+    min1 = min(datos(fi:si,i));
+    min2 = min(datos(si:ti,i));
+    
+    
+    % Adjust necesari per a fixar els llimis relatius dacord amb
+    % l'oscilació entre minim i maxims absoluts.
+    
+    dif1 = max1-min1;
+    dif2 = max1-min2;
+    
+    % Llimits relatius
+    minim1 = 0.05*dif1 + min1; 
+    maxim1 = 0.85*dif1 + min1;
+    maxim2 = 0.98*dif1 + min1;
+    minim2 = 0.05*dif2 + min2;
+   
+    
+    % Umbralitzem en funcio del interval
+    
+    % Interval [1:si]
+    for j=1:si
+        
+        if datos(j,i) < minim1
+            
+            datos2(j,i) = minim1;
+            
+        elseif datos(j,i) > maxim2
+            
+            datos2(j,i) = maxim2;
+            
+       
+        elseif datos(j,i) > maxim1
+            
+            datos2(j,i) = maxim1;
+       
+        else
+            
+            datos2(j,i) = datos(j,i);
+            
+        end
+        
+    end
+    
+    % Interval [si:ti]
+    
+    for j=si:ti
+        
+         if datos(j,i) > maxim2
+            
+            datos2(j,i) = maxim2;
+            
+         elseif datos(j,i) > maxim1
+            
+            datos2(j,i) = maxim1;
+            
+         elseif datos(j,i) < minim2
+            
+            datos2(j,i) = minim2;
+            
+          else
+            
+            datos2(j,i) = datos(j,i);        
+        
+        end
+        
+        
+    end
+    
+    
+    
+    
+  
+    
+    
+    
+    
+end
+
 end
 
 
