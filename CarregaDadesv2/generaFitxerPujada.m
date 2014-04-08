@@ -1,8 +1,8 @@
-function generaFitxer(carpeta)
+function generaFitxerPujada(carpeta)
 format long;
     % Variables Globals
 
-    fitxerfinal = 'Z:\matlab\dades\prova4_invertido\Resultats\08_04_14\DadesTestPlus.txt';
+    fitxerfinal = 'Z:\matlab\dades\Resultatsproves\DadesTestPlus.txt';
 
 
     % Generem la capçalera del fitxer suposem 32 sensors
@@ -66,8 +66,8 @@ format long;
 
         file = files(i);
         file = file{:}
-        [datos, datos2, T, fi, si, ti] = carregaDades(file, 0);
-        [aSlope,bSlope,cSlope,aPolySlope,bPolySlope,cPolySlope,V_highta,V_hightb,V_low,DV_highta,DV_hightb,DV_low,Dif1,Dif2] = calculaParametres(fi,si,ti,datos2,datos);
+        [datos, datos2, T, fi, si, ti] = carregaDadesPujada(file, 0);
+        [aSlope,bSlope,cSlope,aPolySlope,bPolySlope,cPolySlope,V_highta,V_hightb,V_low,DV_highta,DV_hightb,DV_low,Dif1,Dif2] = calculaParametresPujada(fi,si,ti,datos2,datos);
         
         % Inicialitzem string
         fila = '';
