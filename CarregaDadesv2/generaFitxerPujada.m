@@ -34,7 +34,7 @@ format long;
         capsalera = [capsalera,'@ATTRIBUTE ','aSlope','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','aSlope2','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','aSlope3','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','aSlope4','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','aSlope5','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','VA1','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','VA2','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','VA3','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','VA4','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','VA5','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','VB1','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','VB2','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','VB3','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','VB4','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','VB5','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','VC1','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','VC2','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','VC3','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','VC4','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','VC5','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','DVA','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','DVB','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','DVC','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','difA','-',num2str(i),' numeric',char(13),'@ATTRIBUTE ','difB','-',num2str(i),' numeric',char(13)];
     end
     
-    capsalera = [capsalera,'@ATTRIBUTE ','name',' {CONTROL,ETHYLENO,ETHYLENOCERA,QUIMICA}',char(13),'@data'];
+    capsalera = [capsalera,'@ATTRIBUTE ','tempo',' {tempo0,tempo1,tempo2,tempo3}',char(13),'@ATTRIBUTE ','name',' {CONTROL,ETHYLENO,ETHYLENOCERA,QUIMICA}',char(13),'@data'];
     
     % Guardem la capçalera
     WriteToFile(fitxerfinal, capsalera);
@@ -66,7 +66,8 @@ format long;
         if strcmp(aux3 ,'punto.txt')== 0
             files(j)=files2(i);
             % Guardem els parametres M, N, tempo i name 
-            name{j} = carpeta1{:};
+            carpeta1 = strsplit(carpeta1{:},'_');
+            name{j} = carpeta1{1};
             mprev = extensions{end};
             mprev = strsplit(mprev,'.');
             m{j} = mprev{1};
@@ -102,7 +103,7 @@ format long;
         
         end
         
-        fila = [fila,',',name{i}]
+        fila = [fila,',',tempo{i},',',name{i}]
         
         % Afegim el nom de la carpeta
        % fila = [fila,carpeta2{i}];
